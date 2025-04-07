@@ -19,12 +19,13 @@ const dbconnect = require('./config/db.js');
 
 
 
-const appointementRouter = require("./routes/appointement.routes.js")
-const adminRouter = require('./routes/admin.routes.js')
+const appointementRouter = require("./routes/appointement.routes.js");
+const adminRouter = require('./routes/admin.routes.js');
+const contectUsRouter = require('./routes/contectUs.routes.js');
 
 app.use("/appointement", appointementRouter);
 app.use("/admin", adminRouter);
-
+app.use("/contectUs", contectUsRouter);
 
 
 // Start the server
