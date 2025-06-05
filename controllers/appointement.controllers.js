@@ -4,12 +4,17 @@ const Appointment = require("../models/appointement.model.js");
 const createAppointment = async (req, res) => {
     try {
         const data = req.body;
-        const {fullName, mobile, email, requiredAppointmentDate} = req.body;
-        
-        if(!fullName || !mobile || !email || !requiredAppointmentDate){
-            return res.status.json({success: false, error: "Name, mobile, email and required appointement date is compulsary"})
+        const { fullName, mobileNumber, email, gender, requiredAppointmentDate } = req.body;
+
+        const idPhoto = req.files['idPhoto']?.[0]?.path || null;
+        const additionalDocs = req.files['additionalDocs']?.map(file => file.path) || [];
+
+        if (!fullName || !mobileNumber || !email || !requiredAppointmentDate || !gender || !idPhoto) {
+            return res.status.json({ success: false, error: "Name, mobile, email, gender, photo of id proof and required appointement date is compulsary" })
         }
-        const newAppointment = new Appointment(data);
+
+        const payload = {photoIdProofUrl : idPhoto, supportingDocumentsUrls : additionalDocs, ...data}
+        const newAppointment = new Appointment(payload);
         await newAppointment.save();
         res.status(201).json({ success: true, message: "Appointment created successfully", data: newAppointment });
     } catch (error) {
@@ -43,8 +48,8 @@ const getAppointmentById = async (req, res) => {
 // ✅ Update Appointment
 const updateAppointment = async (req, res) => {
     try {
-        const {status} = req.body;
-        const updatedAppointment = await Appointment.findByIdAndUpdate(req.params.id,{status}, { new: true });
+        const { status } = req.body;
+        const updatedAppointment = await Appointment.findByIdAndUpdate(req.params.id, { status }, { new: true });
         if (!updatedAppointment) {
             return res.status(404).json({ success: false, error: "Appointment not found" });
         }

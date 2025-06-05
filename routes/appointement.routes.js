@@ -1,11 +1,15 @@
 const {createAppointment, getAllAppointments, getAppointmentById, deleteAppointment, updateAppointment} = require('../controllers/appointement.controllers.js');
 const express = require('express');
 const verifyJWT = require('../middleware/auth.middleware.js');
+const {upload} = require('../utils/multer.js')
 
 const router = express.Router();
 
 // 🔹 Create a new appointment
-router.post("/createAppointement", createAppointment);
+router.post("/createAppointement",upload.fields([
+  { name: 'idPhoto', maxCount: 1 },
+  { name: 'additionalDocs', maxCount: 10 }
+]), createAppointment);
 
 // 🔹 Get all appointments
 router.get("/getAllAppointement",verifyJWT, getAllAppointments);
