@@ -10,7 +10,7 @@ const createAppointment = async (req, res) => {
         const additionalDocs = req.files['additionalDocs']?.map(file => file.path) || [];
 
         if (!fullName || !mobileNumber || !email || !requiredAppointmentDate || !gender || !idPhoto) {
-            return res.status.json({ success: false, error: "Name, mobile, email, gender, photo of id proof and required appointement date is compulsary" })
+            return res.status(404).json({ success: false, error: "Name, mobile, email, gender, photo of id proof and required appointement date is compulsary" })
         }
 
         const payload = {photoIdProofUrl : idPhoto, supportingDocumentsUrls : additionalDocs, ...data}
